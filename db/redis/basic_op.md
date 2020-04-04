@@ -1,3 +1,14 @@
+### 特别说明
+```
+redis 迭代命令SCAN、SSCAN、HSCAN、ZSCAN
+SCAN 命令用于迭代当前数据库中的数据库键。
+SSCAN 命令用于迭代集合键中的元素。
+HSCAN 命令用于迭代哈希键中的键值对。
+ZSCAN 命令用于迭代有序集合中的元素（包括元素成员和元素分值）
+SCAN、SSCAN、HSCAN、ZSCAN每次执行都只会返回少量元素，所以这些命令可以用于生产环境，而不会出现像KEYS、SMEMBERS命令带来的问题，
+当KEYS命令被用于处理一个大的数据库时，又或者SMEMBERS命令被用于处理一个大的集合键时，它们可能会阻塞服务器达数秒之久
+```
+
 ###  redis常用数据结构
 
 ```
@@ -174,5 +185,198 @@ srem new_set a g  //从new_set中删除a和g两个元素
 5) "e"
 ```
 
+### sorted_set
+```
+zadd name_zset 1 zhangsan
+zadd name_zset 3 lisi
+zadd name_zset 2 wangwang
+
+zcard name_zset
+127.0.0.1:6379> zcard name_zset
+(integer) 3
+
+zcount name_zset 2 3  // 返回指定分数区间元素的个数，含头也含尾
+127.0.0.1:6379> zcount name_zset 2 3
+(integer) 2
+
+zrange name_zset 0 1  //  返回指定索引区间的元素，含头也含尾
+127.0.0.1:6379> zrange name_zset 0 1
+1) "zhangsan"
+2) "wangwang"
+
+zrange name_zset 0 -1 withscores  // 将分数一并返回
+127.0.0.1:6379> zrange name_zset 0 -1 withscores
+1) "zhangsan"
+2) "1"
+3) "wangwang"
+4) "2"
+5) "lisi"
+6) "3"
+
+zadd salary 4000 zhangsan
+zadd salary 6000 lisi
+zadd salary 9000 wangwu
+zadd salary 7000 zhaoliu
+
+127.0.0.1:6379> zrange salary 0 -1 withscores
+1) "zhangsan"
+2) "4000"
+3) "lisi"
+4) "6000"
+5) "zhaoliu"
+6) "7000"
+7) "wangwu"
+8) "9000"
+
+zrangebyscore salary 6000 7000
+127.0.0.1:6379> zrangebyscore salary 6000 7000
+1) "lisi"
+2) "zhaoliu"
+
+zrangebyscore salary 6000 7000 withscores
+127.0.0.1:6379> zrangebyscore salary 6000 7000 withscores
+1) "lisi"
+2) "6000"
+3) "zhaoliu"
+4) "7000"
+
+zrangebyscore salary -inf 7000 withscores   //获取工资小于等于7000的
+127.0.0.1:6379> zrangebyscore salary -inf 7000 withscores
+1) "zhangsan"
+2) "4000"
+3) "lisi"
+4) "6000"
+5) "zhaoliu"
+6) "7000"
+
+
+127.0.0.1:6379> zrangebyscore salary -inf (7000 withscores  //获取工资小于7000的
+1) "zhangsan"
+2) "4000"
+3) "lisi"
+4) "6000"
+
+127.0.0.1:6379> zrangebyscore salary -inf +inf  // 获取全部元素
+1) "zhangsan"
+2) "lisi"
+3) "zhaoliu"
+4) "wangwu"
+
+zrank salary zhaoliu  //  返回有序集合中元素的下标索引
+127.0.0.1:6379> zrank salary zhaoliu
+(integer) 2
+
+zcount salary (6000 (9000   //  返回工资集合中，薪资大于6000小于9000的人的个数
+127.0.0.1:6379> zcount salary (6000 (9000
+(integer) 1
+
+ZLEXCOUNT key min max  //  有疑问？？？在有序集合中计算指定字典区间内成员数量
+
+zrevrange salary 0 -1 withscores  // 根据索引选取数据，然后根据分数倒序返回
+127.0.0.1:6379> zrevrange salary 0 -1 withscores
+1) "wangwu"
+2) "9000"
+3) "zhaoliu"
+4) "7000"
+5) "lisi"
+6) "6000"
+7) "zhangsan"
+8) "4000"
+
+zrevrangebyscore salary 7000 4000 withscores  // 根据分数范围选取数据，然后根据分数倒序返回
+127.0.0.1:6379> zrevrangebyscore salary 7000 4000 withscores
+1) "zhaoliu"
+2) "7000"
+3) "lisi"
+4) "6000"
+5) "zhangsan"
+6) "4000"
+
+----------------------------
+127.0.0.1:6379> zrevrange salary 0 -1 withscores
+1) "wangwu"
+2) "9000"
+3) "zhaoliu"
+4) "7000"
+5) "lisi"
+6) "6000"
+7) "zhangsan"
+8) "4000"
+
+zrevrank salary lisi  //  获取倒序排名中的次序
+127.0.0.1:6379> zrevrank salary lisi
+(integer) 2
+----------------------------
+
+zscore salary lisi  // 获取成员分数
+127.0.0.1:6379> zscore salary lisi
+"6000"
+
+127.0.0.1:6379> zscan salary 0 
+1) "0"
+2) 1) "zhangsan"
+   2) "4000"
+   3) "lisi"
+   4) "6000"
+   5) "zhaoliu"
+   6) "7000"
+   7) "wangwu"
+   8) "9000"
+   
+127.0.0.1:6379> zscan salary 0  match z*  // 可以理解为一个迭代器，从索引下标为0开始，value以z开头，按照score排序
+1) "0"
+2) 1) "zhangsan"
+   2) "4000"
+   3) "zhaoliu"
+   4) "7000"
+
+
+127.0.0.1:6379> zrange salary 0 -1 withscores
+1) "zhangsan"
+2) "4000"
+3) "lisi"
+4) "6000"
+5) "zhaoliu"
+6) "7000"
+7) "wangwu"
+8) "9000"
+
+zremrangebyscore salary (6000 7000   //删除分数大于6000小于等于7000的所有元素
+127.0.0.1:6379> zremrangebyscore salary (6000 7000 
+(integer) 1
+
+127.0.0.1:6379> zrange salary 0 -1 withscores
+1) "zhangsan"
+2) "4000"
+3) "lisi"
+4) "6000"
+5) "wangwu"
+6) "9000"
+
+
+zremrangebyrank salary 1 2  // 将排名在第二位和第三位的数据删除掉
+127.0.0.1:6379> zremrangebyrank salary 1 2
+(integer) 2
+
+127.0.0.1:6379> zrange salary 0 -1 withscores
+1) "zhangsan"
+2) "4000"
+
+
+zadd salary 10000 hale
+127.0.0.1:6379> zrange salary 0 -1 withscores
+1) "zhangsan"
+2) "4000"
+3) "hale"
+4) "10000"
+
+zrem salary zhangsan hale  //删除指定元素，可以是多个
+127.0.0.1:6379> zrem salary zhangsan hale
+(integer) 2
+
+127.0.0.1:6379> zrange salary 0 -1 withscores
+(empty list or set)
+
+```
 
 
