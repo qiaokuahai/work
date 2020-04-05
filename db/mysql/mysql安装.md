@@ -45,4 +45,10 @@ yum makecache
         
         // 此时数据库还不能远程访问，下面指令赋予root用户所有权限，包括远程登录
         GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '123456' WITH GRANT OPTION;
+        
+    5. mysql --version 5.7.29, 创建表的时候会报出1055的错误
+    [Err] 1055 - Expression #1 of ORDER BY clause is not in GROUP BY clause and contains nonaggregated column 'information_schema.PROFILING.SEQ' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+    解决方法：在my.cnf 里面设置sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'在sql_mode 中去掉only_full_group_by 解决问题！
+    关于sql_mode的介绍： https://my.oschina.net/u/3083563/blog/2032397
+
 ```
