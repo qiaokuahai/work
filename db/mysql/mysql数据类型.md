@@ -126,3 +126,27 @@ varchar：varchar(n)中的n表示字符数，最大空间是65535个字节， �
      MySQL5.0.3以前版本varchar(n)中的n表示字节数；
      MySQL5.0.3以后版本varchar(n)中的n表示字符数；
 ```
+
+###  int(4) 和 int(7)
+```
+drop table if exists userinfo;
+create table `userinfo`(
+	`id` int(4) unsigned ZEROFILL,
+	`new_id` int(7) unsigned ZEROFILL
+);
+
+insert into `userinfo` values (123, 123);
+insert into `userinfo` values (12345, 12345);
+select * from userinfo;
+//  可以看到int(4)里面的4只是显示宽度，如果有zerofill这个选项，会补足0，例如123，宽度是3，则补一个0，
+//  如果超过宽度，例如12345宽度为5，超过4 ，则正常显示
+mysql> select * from userinfo;
++-------+---------+
+| id    | new_id  |
++-------+---------+
+|  0123 | 0000123 |
+| 12345 | 0012345 |
++-------+---------+
+2 rows in set (0.00 sec)
+
+```
