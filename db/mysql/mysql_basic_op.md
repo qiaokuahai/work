@@ -20,6 +20,56 @@ create table `userinfo`(
 auto_increment=2:  累加步长，一次加2。实际的数据例如： 1  3  5  7
 ```
 
+###  更改表结构
+```
+alter table userinfo drop created_at;  // 删除表字段
+alter table userinfo add created_at timestamp not null;  //添加表字段
+alter table userinfo modify created_at datetime not null;  //更改timestamp类型为datatime类型
+alter table userinfo change new_created_at created_at timestamp;  // 更改字段名并且可以更改类型
+alter table userinfo rename new_userinfo;  //修改表名
+alter table new_userinfo engine=myisam;  //修改存储引擎
+alter table new_userinfo drop foreign key your_foreign_key_name;  //删除外键
+```
+
+###  索引
+```
+create index name_address_idx on new_userinfo(name, address);
+show index from new_userinfo\G;
+
+```
+
+###  导出数据
+```
+导出数据可能会出现 MySQL server is running with the --secure-file-priv option so it cannot execute this statement
+修改/etc/my.cnf文件，加入以下配置，指定存放的目录文件。
+secure-file-priv=/tmp
+select * from new_userinfo into outfile '/tmp/new_userinfo.txt';
+
+```
+
+###  mysqldump
+```
+备份数据：
+    // 加入-B 会包含建库语句
+    mysqldump -h127.0.0.1 -p3306 -uroot -p123456 -B > ~/tmp_file/just_data.sql  //导出整个数据库包含数据，包含建立库的语句
+    mysqldump -h 127.0.0.1 -p3306 -uroot -p123456  test > ~/tmp_file/test.sql  //导出这个库中所有的表结构以及数据，不包含建库语句
+    mysqldump -h 127.0.0.1 -p3306 -uroot -p123456  test new_userinfo student > ~/tmp_file/many_table.sql  // 导出多张表的结构以及数据
+    
+    //加入 -d 指令表示导出表结构，如果不加表示表结构及数据同时导出。
+    mysqldump -h 127.0.0.1 -p3306 -uroot -p123456 -d test > ~/tmp_file/test.sql  //只导出test库的表结构
+    mysqldump -h 127.0.0.1 -p3306 -uroot -p123456 -d test new_userinfo> ~/tmp_file/new_userinfo.sql  //导出test库下面new_userinfo这张表的表结构
+    
+    // 加入-t只导出数据
+    mysqldump -h127.0.0.1 -p3306 -uroot -p123456 test new_userinfo student -t > ~/tmp_file/just_data.sql  //只导出数据
+恢复数据：
+    mysql -uroot -p123456 < your.sql  // 这里的your.sql的语句中应该包含建库语句
+    mysql -uroot -p123456 test < test.sql  
+    或者登陆之后
+    使用source your.sql  
+
+```
+
+
 ###  插入insert
 ```
 // 注意， name和desc是mysql中的关键字，所以需要将其加上特殊引号
