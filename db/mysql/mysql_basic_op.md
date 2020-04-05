@@ -149,3 +149,45 @@ mysql> select * from userinfo
 4 rows in set (0.00 sec)
 
 ```
+###  join on where注意事项
+```
+    只要理解on和where的执行顺序，就很好理解。on的执行顺序要早于where
+    LEFT JOIN 关键字会从左表 (table_name1) 那里返回所有的行，即使在右表 (table_name2) 中没有匹配的行。
+    数据库在通过连接两张或多张表来返回记录时，都会生成一张中间的临时表，然后再将这张临时表返回给用户。
+    
+    在left join下，两者的区别：
+    on是在生成临时表的时候使用的条件，不管on的条件是否起到作用，都会返回左表 (table_name1) 的行。
+    where则是在生成临时表之后使用的条件，此时已经不管是否使用了left join了，只要条件不为真的行，全部过滤掉。
+    例如：
+    table1
+    +----+----------+
+    | id | No       | 
+    +----+----------+
+    |  1 | n1     |
+    |  2 | n2     |
+    |  3 | n3     |
+    +----+----------+
+    
+    table2
+    +----+----------+
+    | id | name     | 
+    +----+----------+
+    |  n1 | aaa |
+    |  n2 | bbb |
+    |  n3 | ccc |
+    +----+----------+
+    
+    select a.id,a.No,b.name from table1 a left join table2 b on (a.No = b.No and b.name='aaa');
+    
+    |id |No |name|
+    |---|---|---|
+    |1  |n1 |aaa|
+    |2  |n2 |(Null)|
+    |3  |n3 |(Null)|   
+    
+    select a.id,a.No,b.name from table1 a left join table2 b on (a.No = b.No) where b.name='aaa';
+    |id |No |name|
+    |---|---|---|
+    |1  |n1 |aaa|
+    
+```
