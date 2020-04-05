@@ -38,12 +38,20 @@ show index from new_userinfo\G;
 
 ```
 
-###  导出数据
+###  导出数据以及复制表操作
 ```
 导出数据可能会出现 MySQL server is running with the --secure-file-priv option so it cannot execute this statement
 修改/etc/my.cnf文件，加入以下配置，指定存放的目录文件。
 secure-file-priv=/tmp
 select * from new_userinfo into outfile '/tmp/new_userinfo.txt';
+
+复制表操作 
+MySQL 数据库不支持 SELECT ... INTO 语句
+insert into select from 要求目标表存在。
+
+复制表尽量使用下面的操作,不需要提前创建表
+create table auto_new_userinfo as select * from new_userinfo; //复制表以及数据
+create table auto_new_userinfo as select * from new_userinfo where 1=2;  //只复制表结构
 
 ```
 
