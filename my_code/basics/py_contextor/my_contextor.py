@@ -36,7 +36,6 @@ def contextmanager(func):
 
 @contextmanager
 def tt():
-    # 装饰器里面的业务逻辑需要提前写好但是上下文的逻辑不需要提前写好，具体在写代码的过程中动态添加逻辑，
     # 体现在函数中yield这行代码的上面和下面
     yield
 
@@ -61,7 +60,7 @@ def tt2():
 if __name__ == "__main__":
     tt2()
     print("----上面是装饰器，下面是上下文-----")
-    print("---装饰器里面的业务逻辑需要提前写好但是上下文的逻辑不需要提前写好，具体在写代码的过程中动态添加逻辑，体现在函数中yield这行代码的上面和下面---")
+    print("---对比装饰器，上下文更加灵活，可以在代码中任何地方插入---")
     with tt() as res:
         # raise Exception()
         print("middle")
