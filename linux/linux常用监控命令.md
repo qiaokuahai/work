@@ -88,7 +88,7 @@ i: 使top不显示任何闲置或者僵死进程。
 c: 显示整个命令行而不只是显示命令名
 ```
 
-# strace 命令
+### strace 命令
 ```
 我们回到strace的使用上来。strace有两种运行模式。
 
@@ -117,5 +117,55 @@ strace -tt -T -v -f -e trace=file -o /data/log/strace.log -s 1024 -p 23489
 -o 把strace的输出单独写到指定的文件
 -s 当系统调用的某个参数是字符串时，最多输出指定长度的内容，默认是32个字节
 -p 指定要跟踪的进程pid, 要同时跟踪多个pid, 重复多次-p选项即可。
+
+```
+
+### iostat
+
+```
+# iostat属于sysstat软件包。可以直接安装。
+yum install sysstat
+
+[root@VM_0_6_centos shell_scripts]# iostat
+Linux 3.10.0-862.el7.x86_64 (VM_0_6_centos) 	04/20/2020 	_x86_64_	(2 CPU)
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           1.03    0.00    0.59    0.19    0.00   98.19
+
+Device:            tps    kB_read/s    kB_wrtn/s    kB_read    kB_wrtn
+vda               9.14        32.42       107.88  216495109  720371924
+scd0              0.00         0.00         0.00        314          0
+ 
+
+说明：
+cpu属性值说明：
+
+%user：CPU处在用户模式下的时间百分比。
+%nice：CPU处在带NICE值的用户模式下的时间百分比。
+%system：CPU处在系统模式下的时间百分比。
+%iowait：CPU等待输入输出完成时间的百分比。
+%steal：管理程序维护另一个虚拟处理器时，虚拟CPU的无意识等待时间百分比。
+%idle：CPU空闲时间百分比。
+
+备注：
+
+如果%iowait的值过高，表示硬盘存在I/O瓶颈
+如果%idle值高，表示CPU较空闲
+如果%idle值高但系统响应慢时，可能是CPU等待分配内存，应加大内存容量。
+如果%idle值持续低于10，表明CPU处理能力相对较低，系统中最需要解决的资源是CPU。
+
+
+cpu属性值说明:
+tps：该设备每秒的传输次数
+kB_read/s：每秒从设备（drive expressed）读取的数据量；
+kB_wrtn/s：每秒向设备（drive expressed）写入的数据量；
+kB_read：  读取的总数据量；
+kB_wrtn：写入的总数量数据量；
+```
+
+### tcpdump
+
+```
+TODO
 
 ```
