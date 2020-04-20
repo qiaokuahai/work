@@ -63,4 +63,7 @@ chmod ［who］ ［+ | - | =］ ［mode］ 文件名
 　　在一个命令行中可给出多个权限方式，其间用逗号隔开。例如：chmod g+r，o+r example
 　　使同组和其他用户对文件example 有读权限。
 
+5. 杀掉包含指定名字的进程，例如nginx
+ps -ef | grep nginx | grep -v grep | awk '{print $2}' | xargs kill -9
+
 ```
