@@ -33,3 +33,8 @@ directoryperdb=true
 ```
 mongod -f /etc/mongodb.conf
 ```
+### 用户初始化
+```
+https://segmentfault.com/a/1190000015603831
+
+```
