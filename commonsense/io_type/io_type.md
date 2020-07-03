@@ -6,6 +6,8 @@
 
 [flask io原理](http://xiaorui.cc/archives/4264)
 
+[epoll原理](https://my.oschina.net/editorial-story/blog/3052308)
+
 ```
 1) 同步阻塞：小明一直盯着下载进度条，到 100% 的时候就完成。
 同步体现在：等待下载完成通知；

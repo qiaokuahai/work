@@ -21,9 +21,9 @@ class ConstType(type):
 class Person(metaclass=ConstType):
     name = 'person'
 
-    def __new__(cls, *args, **kwargs):
-        obj = super(Person, cls).__new__(cls)  # 返回一个本类的实例
-        return obj
+    # def __new__(cls, *args, **kwargs):
+    #     obj = super(Person, cls).__new__(cls)  # 返回一个本类的实例
+    #     return obj
 
     def __init__(self, school, score):
         self.school = school

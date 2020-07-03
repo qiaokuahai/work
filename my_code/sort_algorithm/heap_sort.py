@@ -43,7 +43,7 @@ def heap_sort(input_list):
     # 最后一个结点的下标为length//2-1
     # 建立初始大根堆
     # 构建堆的时候一定要倒着循环，这是因为底层的数据构建完成之后，上层的数据就可以根据底层的结果来构建。
-    for i in range(0, length // 2)[::-1]:
+    for i in range(length // 2 - 1, -1, -1):
         heap_adjust(input_list, i, length)
 
     for j in range(1, length)[::-1]:
