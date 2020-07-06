@@ -34,10 +34,22 @@ def contextmanager(func):
     return inner
 
 
+# def my_test():
+#     print("before yield")
+#     yield "zhangsan"
+#     print("after yield")
+#
+#
+# for x in my_test():
+#     print(x)
+
+
 @contextmanager
 def tt():
     # 体现在函数中yield这行代码的上面和下面
+    print("before yield")
     yield
+    print("after yield")
 
 
 def my_deco(func):

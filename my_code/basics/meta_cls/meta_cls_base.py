@@ -18,7 +18,11 @@ class ConstType(type):
         return meta_cls
 
 
-class Person(metaclass=ConstType):
+class A:
+    a_name = "A_class"
+
+
+class Person(A, metaclass=ConstType):
     name = 'person'
 
     # def __new__(cls, *args, **kwargs):

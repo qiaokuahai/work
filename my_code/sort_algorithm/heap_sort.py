@@ -58,7 +58,7 @@ def heap_sort(input_list):
 
 
 if __name__ == '__main__':
-    input_list = [50, 123, 543, 187, 8, 9, 7, 49, 30, 0, 2, 11, 100, 1, 6, 249]
+    input_list = [50, 123, 543, 187, 8, 9, 7, 49, 30, 0, 2, 11, 100, 1, 6, 249, 111]
     print("input_list:")
     print(input_list)
     sorted_list = heap_sort(input_list)
