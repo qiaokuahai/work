@@ -11,6 +11,15 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "cwd": "${fileDirname}"  // 设置相对路径，在debug时可以切换到当前文件所在的目录
+         },
+         {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "/root/worckspace/flask-server.py",
+            "console": "integratedTerminal",
+            "gevent": true,  
+            "args": ["--config-file", "/etc/your_cfg.conf"]
          }
     ]
 }
