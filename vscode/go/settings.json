@@ -1,0 +1,10 @@
+{
+    "go.goroot": "/usr/local/go", //go的安装目录，不是执行程序
+    "go.gopath": "/root/go",
+    "go.gocodeAutoBuild": false,
+    "files.autoSave": "onFocusChange",
+    "gopls": {
+        "build.experimentalWorkspaceModule": true
+    }
+
+}
