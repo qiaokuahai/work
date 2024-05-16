@@ -4,24 +4,24 @@
 """
 
 
-def quick_sort(arr, start, end):
-    if start >= end:
-        return
-    left_index = start
-    right_index = end
-    flag_value = arr[left_index]
-    while left_index < right_index:  # 这里面一定不能是left_index <= right_index,因为最终要保证left_index与right_index重合
-        while left_index < right_index and arr[right_index] >= flag_value:  # 这里必须是 >=， 如果是大于， 则由数据相等的时候会导致死循环
-            right_index -= 1
-        arr[left_index] = arr[right_index]
-        while left_index < right_index and arr[left_index] <= flag_value:
-            left_index += 1
-        arr[right_index] = arr[left_index]
+def partition(lst, start, end):
+    tmp = lst[start]
+    while start < end:
+        while lst[end] >= tmp and start < end:
+            end -= 1
+        lst[start] = lst[end]
+        while lst[start] <= tmp and start < end:
+            start += 1
+        lst[end] = lst[start]
+    lst[start] = tmp
+    return start
 
-    # 此时left_index和right_index相等
-    arr[left_index] = flag_value
-    quick_sort(arr, start, left_index-1)
-    quick_sort(arr, right_index + 1, end)
+
+def quick_sort(lst, start, end):
+    if start < end:
+        mid = partition(lst, start, end)
+        quick_sort(lst, start, mid-1)
+        quick_sort(lst, mid+1, end)
 
 
 if __name__ == "__main__":
